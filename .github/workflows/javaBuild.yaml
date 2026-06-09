@@ -1,0 +1,40 @@
+name: Java Maven Build
+
+on:
+  push
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      - name: Verify Java
+        run: java -version
+
+      - name: Verify Maven
+        run: mvn -version
+
+      - name: Build Application
+        run: mvn clean package
+
+      - name: Show Generated Files
+        run: ls -ltr target/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: login-logout-jar
+          path: target/*.jar
